@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Button, Menu, Input, Row, Col, Card, Avatar } from 'antd';
+import { Menu, Input, Row, Col, Card, Avatar } from 'antd';
+
+import LoginForm from '../LoginForm';
 
 const dummy = {
   nickname: 'jino',
   Post: [],
   Followings: [],
   Followers: [],
+  isLoggedIn: false,
 };
 
 const Layout = ({ children }) => {
@@ -28,37 +31,36 @@ const Layout = ({ children }) => {
         </Menu.Item>
       </Menu>
 
-      <Row>
+      <Row gutter={8}>
         <Col xs={24} md={6}>
-          <Card
-            actions={[
-              <div key="twit">
-                내글
-                <br />
-                {dummy.Post.length}
-              </div>,
-              <div key="follwing">
-                팔로윙
-                <br />
-                {dummy.Followings.length}
-              </div>,
-              <div key="follower">
-                팔로워
-                <br />
-                {dummy.Followers.length}
-              </div>,
-            ]}
-          >
-            <Card.Meta
-              avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
-              title={dummy.nickname}
-            />
-          </Card>
-          <Link href="/signup">
-            <a>
-              <Button>회원가입</Button>
-            </a>
-          </Link>
+          {dummy.isLoggedIn ? (
+            <Card
+              actions={[
+                <div key="twit">
+                  내글
+                  <br />
+                  {dummy.Post.length}
+                </div>,
+                <div key="follwing">
+                  팔로윙
+                  <br />
+                  {dummy.Followings.length}
+                </div>,
+                <div key="follower">
+                  팔로워
+                  <br />
+                  {dummy.Followers.length}
+                </div>,
+              ]}
+            >
+              <Card.Meta
+                avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
+                title={dummy.nickname}
+              />
+            </Card>
+          ) : (
+            <LoginForm />
+          )}
         </Col>
         <Col xs={24} md={12}>
           {children}
