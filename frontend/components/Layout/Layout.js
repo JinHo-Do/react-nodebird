@@ -1,5 +1,13 @@
+import PropTypes from 'prop-types';
 import Link from 'next/link';
-import { Button, Menu, Input } from 'antd';
+import { Button, Menu, Input, Row, Col, Card, Avatar } from 'antd';
+
+const dummy = {
+  nickname: 'jino',
+  Post: [],
+  Followings: [],
+  Followers: [],
+};
 
 const Layout = ({ children }) => {
   return (
@@ -19,14 +27,50 @@ const Layout = ({ children }) => {
           <Input.Search enterButton style={{ verticalAlign: 'middle' }} />
         </Menu.Item>
       </Menu>
-      <Link href="/signup">
-        <a>
-          <Button>회원가입</Button>
-        </a>
-      </Link>
-      {children}
+
+      <Row>
+        <Col xs={24} md={6}>
+          <Card
+            actions={[
+              <div key="twit">
+                내글
+                <br />
+                {dummy.Post.length}
+              </div>,
+              <div key="follwing">
+                팔로윙
+                <br />
+                {dummy.Followings.length}
+              </div>,
+              <div key="follower">
+                팔로워
+                <br />
+                {dummy.Followers.length}
+              </div>,
+            ]}
+          >
+            <Card.Meta
+              avatar={<Avatar>{dummy.nickname[0]}</Avatar>}
+              title={dummy.nickname}
+            />
+          </Card>
+          <Link href="/signup">
+            <a>
+              <Button>회원가입</Button>
+            </a>
+          </Link>
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6} />
+      </Row>
     </>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default Layout;
