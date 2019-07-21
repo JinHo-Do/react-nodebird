@@ -1,17 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Form, Input, Checkbox, Button } from 'antd';
 
+import { useInput } from '../utils';
+
 const Signup = () => {
-  // custom input hook
-  const useInput = (initialValie = null) => {
-    const [value, setter] = useState(initialValie);
-    const handler = useCallback(e => {
-      setter(e.target.value);
-    }, []);
-
-    return [value, handler];
-  };
-
   const [id, onChangeId] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
