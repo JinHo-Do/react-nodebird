@@ -6,16 +6,16 @@ const initialState = {
   user: null,
 };
 
-export const logIn = {
+export const logIn = (nickname) => ({
   type: LOG_IN,
-  data: {
-    nickname: 'jino',
+  payload: {
+    nickname,
   },
-};
+});
 
-export const logOut = {
+export const logOut = () => ({
   type: LOG_OUT,
-};
+});
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -32,7 +32,7 @@ const userReducer = (state = initialState, action) => {
         user: null,
       };
     default:
-      break;
+      return state;
   }
 };
 

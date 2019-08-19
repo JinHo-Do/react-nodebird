@@ -23,7 +23,7 @@ const postReducer = (state = initialState, action) => {
         mainPosts: [action.payload, ...state.mainPosts],
       };
     default:
-      break;
+      return state;
   }
 };
 
