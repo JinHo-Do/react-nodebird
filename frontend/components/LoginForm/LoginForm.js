@@ -1,17 +1,22 @@
 import React, { useCallback } from 'react';
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input } from 'antd';
 
 import { useInput } from '../../utils';
+import { loginRequest } from '../../reducers/user';
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const { isLoggingIn } = useSelector(state => state.user);
+
   const [id, onChangeId] = useInput('');
   const [password, onChangePassword] = useInput('');
 
   const onSubmitForm = useCallback(
     e => {
       e.preventDefault();
-      console.log(id, password);
+      dispatch(loginRequest({ id, password }));
     },
     [id, password],
   );
@@ -35,7 +40,7 @@ const LoginForm = () => {
         />
       </div>
       <div style={{ marginTop: 10 }}>
-        <Button type="primary" htmlType="submit" loading={false}>
+        <Button type="primary" htmlType="submit" loading={isLoggingIn}>
           로그인
         </Button>
         <Link href="/signup">
