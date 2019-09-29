@@ -11,7 +11,8 @@ const initialState = {
   isLoggingOut: false,
   isLoggingIn: false,
   logInErrorReason: '',
-  singnedUp: false,
+  isSigningUp: false,
+  isSingnedUp: false,
   signUpErrorReason: '',
   me: null,
   followingList: [],
@@ -105,7 +106,22 @@ const userReducer = (state = initialState, action) => {
     case SIGN_UP_REQUEST:
       return {
         ...state,
+        isSigningUp: true,
+        isSignedUp: false,
+        signUpErrorReason: '',
         ...action.payload,
+      };
+    case SIGN_UP_SUCCESS:
+      return {
+        ...state,
+        isSigningUp: false,
+        isSignedUp: true,
+      };
+    case SIGN_UP_FAILURE:
+      return {
+        ...state,
+        isSigningUp: false,
+        signUpErrorReason: action.error,
       };
     default:
       return state;

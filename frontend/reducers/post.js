@@ -13,6 +13,17 @@ const initialState = {
   imagePaths: [],
   addPostErrorReason: false,
   isAddingPost: false,
+  postAdded: false,
+};
+
+const dummyPost = {
+  user: {
+    id: 2,
+    nickname: '진호',
+  },
+  content: 'new post',
+  img: '',
+  createdAt: '1234',
 };
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -64,7 +75,24 @@ export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 const postReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_POST_REQUEST:
-      return {};
+      return {
+        ...state,
+        isAddingPost: true,
+        postAdded: false,
+      };
+    case ADD_POST_SUCCESS:
+      return {
+        ...state,
+        isAddingPost: false,
+        mainPosts: [dummyPost, ...state.mainPosts],
+        postAdded: true,
+      };
+    case ADD_POST_FAILURE:
+      return {
+        ...state,
+        isAddingPost: false,
+        addPostErrorReason: action.error,
+      };
     default:
       return state;
   }
