@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-const useInput = (initialValie = null) => {
-  const [value, setter] = useState(initialValie);
+const useInput = (initialValue = null) => {
+  const [value, setter] = useState(initialValue);
   const handler = useCallback(e => {
     setter(e.target.value);
   }, []);

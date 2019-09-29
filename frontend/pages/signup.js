@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Form, Input, Checkbox, Button } from 'antd';
 
 import { useInput } from '../utils';
-import { signUp } from '../reducers/user';
+import { signUpRequest } from '../reducers/user';
 
 const Signup = () => {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ const Signup = () => {
         return setTermError(true);
       }
       dispatch(
-        signUp({
+        signUpRequest({
           id,
           password,
           nickname,
