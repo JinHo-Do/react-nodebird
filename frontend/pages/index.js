@@ -6,7 +6,7 @@ import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 
 const Home = () => {
-  const { isLoggedIn, user } = useSelector(state => state.user);
+  const { isLoggedIn, me } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
   // const dispatch = useDispatch();
   // useEffect(() => {
@@ -15,8 +15,8 @@ const Home = () => {
 
   return (
     <div>
-      {user ? (
-        <div>{user.nickname}님, 안녕하세요.</div>
+      {me ? (
+        <div>{me.nickname}님, 안녕하세요.</div>
       ) : (
         <div>로그아웃 했습니다.</div>
       )}

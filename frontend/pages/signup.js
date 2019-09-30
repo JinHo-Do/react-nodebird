@@ -1,5 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Router from 'next/router';
 import { Form, Input, Checkbox, Button } from 'antd';
 
 import { useInput } from '../utils';
@@ -7,17 +8,22 @@ import { signUpRequest } from '../reducers/user';
 
 const Signup = () => {
   const dispatch = useDispatch();
-  const { isSignningUp } = useSelector(state => state.user);
+  const { isSignningUp, me } = useSelector(state => state.user);
+
+  const [passwordCheck, setPasswordCheck] = useState('');
+  const [term, setTerm] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [termError, setTermError] = useState(false);
 
   const [id, onChangeId] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   const [password, onChangePassword] = useInput('');
 
-  // hooks
-  const [passwordCheck, setPasswordCheck] = useState('');
-  const [term, setTerm] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
-  const [termError, setTermError] = useState(false);
+  useEffect(() => {
+    if (me) {
+      Router.push('/');
+    }
+  }, [me && me.id]);
 
   const onSubmit = useCallback(
     e => {
