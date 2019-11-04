@@ -22,7 +22,7 @@ function loginAPI() {}
 
 function* login() {
   try {
-    yield delay(2000);
+    yield delay(500);
     // yield call(loginAPI);
     // 사가의 put은 리덕스의 dispatch 역할을 한다.
     yield put({

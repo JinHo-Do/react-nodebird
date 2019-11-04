@@ -1,19 +1,25 @@
+/* eslint-disable no-case-declarations */
 const initialState = {
   mainPosts: [
     {
+      id: 1,
       user: {
         id: 1,
         nickname: 'jino',
       },
       content: 'first post',
       img: '',
-      createdAt: '1234',
+      createdAt: new Date().toString(),
+      comments: [],
     },
   ],
   imagePaths: [],
   addPostErrorReason: false,
   isAddingPost: false,
   postAdded: false,
+  isAddingComment: false,
+  addCommentErrorReason: false,
+  commentAdded: false,
 };
 
 const dummyPost = {
@@ -21,9 +27,19 @@ const dummyPost = {
     id: 2,
     nickname: '진호',
   },
-  content: 'new post',
+  content: 'new dummy post',
   img: '',
-  createdAt: '1234',
+  createdAt: new Date().toString(),
+};
+
+const dummyComment = {
+  id: 1,
+  user: {
+    id: 3,
+    nickname: '진태',
+  },
+  createdAt: new Date().toString(),
+  content: '밥은 먹고 다니냐?',
 };
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -90,8 +106,35 @@ const postReducer = (state = initialState, action) => {
     case ADD_POST_FAILURE:
       return {
         ...state,
-        isAddingPost: false,
+        isAddingComment: false,
         addPostErrorReason: action.error,
+      };
+    case ADD_COMMENT_REQUEST:
+      return {
+        ...state,
+        isAddingComment: true,
+        commentAdded: false,
+      };
+    case ADD_COMMENT_SUCCESS:
+      const postIndex = state.mainPosts.findIndex(
+        post => post.id === action.payload.postId,
+      );
+      const post = state.mainPosts[postIndex];
+      const comments = [...post.comments, dummyComment];
+      const mainPosts = [...state.mainPosts];
+      mainPosts[postIndex] = { ...post, comments };
+
+      return {
+        ...state,
+        isAddingComment: false,
+        mainPosts,
+        commentAdded: true,
+      };
+    case ADD_COMMENT_FAILURE:
+      return {
+        ...state,
+        isAddingComment: false,
+        addCommentErrorReason: action.error,
       };
     default:
       return state;
