@@ -28,6 +28,6 @@
     "sequelize-cli": "^5.5.1"
   },
   "scripts": {
-    "dev": "nodemon --inspect index.js"
+    "dev": "nodemon --inspect app.js"
   }
 }
