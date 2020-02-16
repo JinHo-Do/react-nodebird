@@ -41,11 +41,23 @@ function* watchLogin() {
   yield takeLatest(LOG_IN_REQUEST, login);
 }
 
-function signUpAPI() {}
+function signUpAPI(data) {
+  return axios.post('http://localhost:8080/api/user/', data);
+}
 
-function* signUp() {
+function* signUp(action) {
   try {
-  } catch (error) {}
+    yield call(signUpAPI, action.payload); // call(function, parameter)
+    yield put({
+      type: SIGN_UP_SUCCESS,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error,
+    });
+  }
 }
 
 function* watchSignUp() {

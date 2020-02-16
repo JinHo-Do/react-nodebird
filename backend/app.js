@@ -1,4 +1,6 @@
 const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
 const db = require('./models');
 const routes = require('./routes');
 
@@ -8,8 +10,10 @@ const app = express();
 
 db.sequelize.sync();
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 routes(app);
 
