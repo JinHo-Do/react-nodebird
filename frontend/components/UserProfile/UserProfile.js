@@ -18,7 +18,7 @@ const UserProfile = () => {
       actions={[
         <div key="twit">
           내글
-          <br />
+          {/* <br />
           {posts.length && posts.length}
         </div>,
         <div key="follwing">
@@ -29,7 +29,7 @@ const UserProfile = () => {
         <div key="follower">
           팔로워
           <br />
-          {followers.length && followers.length}
+          {followers.length && followers.length} */}
         </div>,
       ]}
     >

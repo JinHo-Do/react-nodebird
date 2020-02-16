@@ -58,7 +58,7 @@ export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const loginRequest = ({ id, password }) => ({
   type: LOG_IN_REQUEST,
   payload: {
-    id,
+    userId: id,
     password,
   },
 });
@@ -72,9 +72,10 @@ export const signUpRequest = payload => ({
   payload,
 });
 
-export const loginSuccess = () => ({
-  type: LOG_IN_SUCCESS,
-});
+// export const loginSuccess = payload => ({
+//   type: LOG_IN_SUCCESS,
+//   payload,
+// });
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -86,7 +87,7 @@ const userReducer = (state = initialState, action) => {
     case LOG_IN_SUCCESS:
       return {
         ...state,
-        me: dummyUser,
+        me: action.payload,
         isLoggedIn: true,
         isLoggingIn: false,
       };
