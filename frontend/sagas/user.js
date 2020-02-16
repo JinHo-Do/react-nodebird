@@ -4,11 +4,10 @@ import {
   takeLatest,
   takeEvery,
   call,
-  delay,
+  // delay,
   put,
 } from 'redux-saga/effects';
 import axios from 'axios';
-
 import {
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
@@ -18,15 +17,20 @@ import {
   SIGN_UP_FAILURE,
 } from '../reducers/user';
 
-function loginAPI() {}
+axios.defaults.baseURL =
+  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/api';
 
-function* login() {
+function loginAPI(data) {
+  return axios.post('/user/login', data);
+}
+
+function* login(action) {
   try {
-    yield delay(500);
-    // yield call(loginAPI);
+    const result = yield call(loginAPI, action.payload);
     // 사가의 put은 리덕스의 dispatch 역할을 한다.
     yield put({
       type: LOG_IN_SUCCESS,
+      payload: result.data,
     });
   } catch (error) {
     console.error(error);
@@ -41,11 +45,23 @@ function* watchLogin() {
   yield takeLatest(LOG_IN_REQUEST, login);
 }
 
-function signUpAPI() {}
+function signUpAPI(data) {
+  return axios.post('/user/', data);
+}
 
-function* signUp() {
+function* signUp(action) {
   try {
-  } catch (error) {}
+    yield call(signUpAPI, action.payload); // call(function, parameter)
+    yield put({
+      type: SIGN_UP_SUCCESS,
+    });
+  } catch (error) {
+    console.error(error);
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error,
+    });
+  }
 }
 
 function* watchSignUp() {

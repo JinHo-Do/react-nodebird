@@ -39,7 +39,7 @@ const Signup = () => {
 
       dispatch(
         signUpRequest({
-          id,
+          userId: id,
           password,
           nickname,
         }),
@@ -47,7 +47,7 @@ const Signup = () => {
 
       return null;
     },
-    [password, passwordCheck, term],
+    [id, nickname, password, passwordCheck, term],
   );
 
   const onChangePasswordCheck = useCallback(
