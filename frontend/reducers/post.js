@@ -100,7 +100,7 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         isAddingPost: false,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [action.payload, ...state.mainPosts],
         postAdded: true,
       };
     case ADD_POST_FAILURE:
@@ -108,6 +108,21 @@ const postReducer = (state = initialState, action) => {
         ...state,
         isAddingComment: false,
         addPostErrorReason: action.error,
+      };
+    case LOAD_MAIN_POSTS_REQUEST:
+      return {
+        ...state,
+        mainPosts: [],
+      };
+    case LOAD_MAIN_POSTS_SUCCESS:
+      return {
+        ...state,
+        isAddingPost: false,
+        mainPosts: action.payload,
+      };
+    case LOAD_MAIN_POSTS_FAILURE:
+      return {
+        ...state,
       };
     case ADD_COMMENT_REQUEST:
       return {
@@ -126,8 +141,8 @@ const postReducer = (state = initialState, action) => {
 
       return {
         ...state,
-        isAddingComment: false,
         mainPosts,
+        isAddingComment: false,
         commentAdded: true,
       };
     case ADD_COMMENT_FAILURE:

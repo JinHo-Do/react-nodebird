@@ -19,13 +19,23 @@ const PostForm = () => {
     setText(e.target.value);
   }, []);
 
-  const onSubmitForm = useCallback(e => {
-    e.preventDefault();
-    dispatch({
-      type: ADD_POST_REQUEST,
-      payload: { text },
-    });
-  }, []);
+  const onSubmitForm = useCallback(
+    e => {
+      e.preventDefault();
+
+      if (!text || !text.trim()) {
+        alert('게시글을 작성하세요.');
+        return;
+      }
+
+      dispatch({
+        type: ADD_POST_REQUEST,
+        payload: { content: text },
+      });
+    },
+    [text],
+  );
+
   return (
     <Form
       encType="multipart/form-data"

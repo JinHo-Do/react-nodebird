@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     return res.status(401).send('로그인이 필요합니다.');
   }
 
-  const user = { ...req.user.toJSON() };
+  const user = { ...req.user.toJSON() }; // db에서 읽어 온 객체를 변형할 때는 toJSON 메소드를 사용해야 한다.
   delete user.password;
 
   return res.json(user);

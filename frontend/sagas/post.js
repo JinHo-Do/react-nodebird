@@ -1,5 +1,9 @@
-import { all, fork, takeLatest, put, delay } from 'redux-saga/effects';
+import axios from 'axios';
+import { all, fork, takeLatest, put, call } from 'redux-saga/effects';
 import {
+  LOAD_MAIN_POSTS_REQUEST,
+  LOAD_MAIN_POSTS_SUCCESS,
+  LOAD_MAIN_POSTS_FAILURE,
   ADD_POST_REQUEST,
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
@@ -8,13 +12,19 @@ import {
   ADD_COMMENT_FAILURE,
 } from '../reducers/post';
 
-function addPostAPI() {}
+function addPostAPI(postData) {
+  return axios.post('/post', postData, {
+    withCredentials: true,
+  });
+}
 
-function* addPost() {
+function* addPost(action) {
   try {
-    yield delay(500);
+    const { data } = yield call(addPostAPI, action.payload);
+
     yield put({
       type: ADD_POST_SUCCESS,
+      payload: data,
     });
   } catch (error) {
     yield put({
@@ -26,6 +36,30 @@ function* addPost() {
 
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+function loadMainPostsAPI() {
+  return axios.get('/posts');
+}
+
+function* loadMainPosts() {
+  try {
+    const { data } = yield call(loadMainPostsAPI);
+
+    yield put({
+      type: LOAD_MAIN_POSTS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    yield put({
+      type: LOAD_MAIN_POSTS_FAILURE,
+      error,
+    });
+  }
+}
+
+function* watchLoadMainPosts() {
+  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
 function addCommentAPI() {}
@@ -52,5 +86,9 @@ function* watchAddComment() {
 }
 
 export default function* postSaga() {
-  yield all([fork(watchAddPost), fork(watchAddComment)]);
+  yield all([
+    fork(watchLoadMainPosts),
+    fork(watchAddPost),
+    fork(watchAddComment),
+  ]);
 }

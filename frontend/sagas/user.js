@@ -23,9 +23,6 @@ import {
   SIGN_UP_FAILURE,
 } from '../reducers/user';
 
-axios.defaults.baseURL =
-  process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8080/api';
-
 function loginAPI(data) {
   return axios.post('/user/login', data, {
     withCredentials: true, // cors 쿠키 전송
