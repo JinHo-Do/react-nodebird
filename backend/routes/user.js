@@ -4,7 +4,16 @@ const passport = require('passport');
 
 const db = require('../models');
 
-router.get('/', (req, res) => {});
+router.get('/', (req, res) => {
+  if (!req.user) {
+    return res.status(401).send('로그인이 필요합니다.');
+  }
+
+  const user = { ...req.user.toJSON() };
+  delete user.password;
+
+  return res.json(user);
+});
 
 router.get('/:id', (req, res) => {});
 
@@ -31,7 +40,6 @@ router.post('/', async (req, res, next) => {
       userId,
       password: hashedPassword,
     });
-    console.log('newUser: ', newUser);
 
     return res.json(newUser);
   } catch (error) {
@@ -59,10 +67,30 @@ router.post('/login', (req, res, next) => {
           return next(loginError);
         }
 
-        const filteredUser = { ...user.toJSON() };
-        delete filteredUser.password;
+        const fullUser = await db.User.findOne({
+          where: { id: user.id },
+          include: [
+            // associate된 컬럼을 같이 가져온다.
+            {
+              model: db.Post,
+              as: 'Posts', // User에서 Post를 Posts로 as 를 했기 때문에 as속성을 설정해 준다.
+              attributes: ['id'], // password를 제외하기 위해 id만 가져온다.
+            },
+            {
+              model: db.User,
+              as: 'Followings',
+              attributes: ['id'],
+            },
+            {
+              model: db.User,
+              as: 'Followers',
+              attributes: ['id'],
+            },
+          ],
+          attributes: ['id', 'nickname', 'userId'],
+        });
 
-        return res.json(filteredUser);
+        return res.json(fullUser);
       } catch (error) {
         console.error(error);
         return next(error);
