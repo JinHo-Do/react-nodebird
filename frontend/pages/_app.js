@@ -9,7 +9,7 @@ import rootSaga from '../sagas';
 
 import Layout from '../components/Layout';
 
-const App = ({ Component, store }) => (
+const App = ({ Component, store, pageProps }) => (
   <Provider store={store}>
     <Head>
       <title>NodeBird</title>
@@ -20,7 +20,7 @@ const App = ({ Component, store }) => (
     </Head>
 
     <Layout>
-      <Component />
+      <Component {...pageProps} />
     </Layout>
   </Provider>
 );
@@ -28,6 +28,18 @@ const App = ({ Component, store }) => (
 App.propTypes = {
   Component: PropTypes.elementType.isRequired,
   store: PropTypes.object.isRequired,
+  pageProps: PropTypes.object.isRequired,
+};
+
+App.getInitialProps = async context => {
+  const { ctx, Component } = context;
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps };
 };
 
 export default withRedux((initialState, options) => {

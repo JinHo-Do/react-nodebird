@@ -32,6 +32,16 @@ app.prepare().then(() => {
     }),
   );
 
+  server.get('/hashtag/:tag', (req, res) => {
+    const { tag } = req.params;
+    return app.render(req, res, '/hashtag', { tag });
+  });
+
+  server.get('/user/:id', (req, res) => {
+    const { id } = req.params;
+    return app.render(req, res, '/user', { id });
+  });
+
   server.get('*', (req, res) => {
     return handle(req, res);
   });
