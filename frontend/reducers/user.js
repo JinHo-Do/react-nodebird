@@ -8,7 +8,6 @@ const dummyUser = {
 };
 
 const initialState = {
-  isLoggedIn: false,
   isLoggingOut: false,
   isLoggingIn: false,
   logInErrorReason: '',
@@ -88,7 +87,6 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         me: action.payload,
-        isLoggedIn: true,
         isLoggingIn: false,
       };
     case LOG_IN_FAILURE:
@@ -96,14 +94,43 @@ const userReducer = (state = initialState, action) => {
         ...state,
         me: null,
         isLoggingIn: false,
-        isLoggedIn: false,
         logInErrorReason: action.error,
       };
     case LOG_OUT_REQUEST:
       return {
         ...state,
-        isLoggedIn: false,
+        isLoggingOut: true,
+      };
+    case LOG_OUT_SUCCESS:
+      return {
+        ...state,
+        isLoggingOut: false,
         me: null,
+      };
+    case LOG_OUT_FAILURE:
+      return {
+        ...state,
+        isLoggingOut: false,
+      };
+    case LOAD_USER_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_USER_SUCCESS:
+      if (action.me) {
+        return {
+          ...state,
+          me: action.payload,
+        };
+      }
+
+      return {
+        ...state,
+        userInfo: action.payload,
+      };
+    case LOAD_USER_FAILURE:
+      return {
+        ...state,
       };
     case SIGN_UP_REQUEST:
       return {

@@ -21,7 +21,12 @@ passportConfig();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  }),
+);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   expressSession({
@@ -32,6 +37,7 @@ app.use(
       httpOnly: true,
       secure: false, // https? = true
     },
+    name: 'djh.qw', // connect.sid 대신 할 이름
   }),
 );
 

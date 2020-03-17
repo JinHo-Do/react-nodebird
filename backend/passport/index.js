@@ -9,7 +9,7 @@ module.exports = () => {
   });
 
   // id로 유저 정보를 읽음
-  passport.deserializeUser(async id => {
+  passport.deserializeUser(async (id, done) => {
     try {
       const user = await db.User.findOne({
         where: { id },

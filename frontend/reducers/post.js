@@ -1,18 +1,6 @@
 /* eslint-disable no-case-declarations */
 const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      user: {
-        id: 1,
-        nickname: 'jino',
-      },
-      content: 'first post',
-      img: '',
-      createdAt: new Date().toString(),
-      comments: [],
-    },
-  ],
+  mainPosts: [],
   imagePaths: [],
   addPostErrorReason: false,
   isAddingPost: false,
@@ -20,26 +8,6 @@ const initialState = {
   isAddingComment: false,
   addCommentErrorReason: false,
   commentAdded: false,
-};
-
-const dummyPost = {
-  user: {
-    id: 2,
-    nickname: '진호',
-  },
-  content: 'new dummy post',
-  img: '',
-  createdAt: new Date().toString(),
-};
-
-const dummyComment = {
-  id: 1,
-  user: {
-    id: 3,
-    nickname: '진태',
-  },
-  createdAt: new Date().toString(),
-  content: '밥은 먹고 다니냐?',
 };
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -100,7 +68,7 @@ const postReducer = (state = initialState, action) => {
       return {
         ...state,
         isAddingPost: false,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [action.payload, ...state.mainPosts],
         postAdded: true,
       };
     case ADD_POST_FAILURE:
@@ -108,6 +76,21 @@ const postReducer = (state = initialState, action) => {
         ...state,
         isAddingComment: false,
         addPostErrorReason: action.error,
+      };
+    case LOAD_MAIN_POSTS_REQUEST:
+      return {
+        ...state,
+        mainPosts: [],
+      };
+    case LOAD_MAIN_POSTS_SUCCESS:
+      return {
+        ...state,
+        isAddingPost: false,
+        mainPosts: action.payload,
+      };
+    case LOAD_MAIN_POSTS_FAILURE:
+      return {
+        ...state,
       };
     case ADD_COMMENT_REQUEST:
       return {
@@ -120,14 +103,14 @@ const postReducer = (state = initialState, action) => {
         post => post.id === action.payload.postId,
       );
       const post = state.mainPosts[postIndex];
-      const comments = [...post.comments, dummyComment];
+      const comments = [...post.comments, action.payload.comment];
       const mainPosts = [...state.mainPosts];
       mainPosts[postIndex] = { ...post, comments };
 
       return {
         ...state,
-        isAddingComment: false,
         mainPosts,
+        isAddingComment: false,
         commentAdded: true,
       };
     case ADD_COMMENT_FAILURE:

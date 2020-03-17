@@ -1,5 +1,7 @@
+/* eslint-disable react/jsx-wrap-multilines */
 import { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, Card, Icon, Avatar, Button, List, Comment, Input } from 'antd';
 
@@ -56,9 +58,23 @@ const PostCard = ({ post }) => {
         extra={<Button>팔로우</Button>}
       >
         <Card.Meta
-          avatar={<Avatar>{post.user.nickname[0]}</Avatar>}
-          title={post.user.nickname}
-          description={post.content}
+          avatar={<Avatar>{post.User && post.User.nickname[0]}</Avatar>}
+          title={post.User && post.User.nickname}
+          description={
+            <div>
+              {post.content.split(/(#[^\s]+)/g).map(tag => {
+                if (tag.match(/#[^\s]+/)) {
+                  return (
+                    <Link href={`/hashtag/${tag.slice(1)}`} key={tag}>
+                      <a>{tag}</a>
+                    </Link>
+                  );
+                }
+
+                return tag;
+              })}
+            </div>
+          }
         />
       </Card>
 
@@ -83,8 +99,8 @@ const PostCard = ({ post }) => {
             renderItem={item => (
               <li>
                 <Comment
-                  author={item.user.nickname}
-                  avatar={<Avatar>{item.user.nickname[0]}</Avatar>}
+                  author={item.User.nickname}
+                  avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
                   content={item.content}
                   dateTime={item.createdAt}
                 />

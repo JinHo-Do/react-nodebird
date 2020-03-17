@@ -1,17 +1,21 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { logIn } from '../reducers/user';
+
+import { LOAD_MAIN_POSTS_REQUEST } from '../reducers/post';
 
 import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 
 const Home = () => {
-  const { isLoggedIn, me } = useSelector(state => state.user);
+  const { me } = useSelector(state => state.user);
   const { mainPosts } = useSelector(state => state.post);
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(logIn('jino'));
-  // }, []);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_MAIN_POSTS_REQUEST,
+    });
+  }, []);
 
   return (
     <div>
@@ -20,10 +24,9 @@ const Home = () => {
       ) : (
         <div>로그아웃 했습니다.</div>
       )}
-      {isLoggedIn && <PostForm />}
-      {mainPosts.map(post => (
-        <PostCard key={post.createdAt} post={post} />
-      ))}
+      {me && <PostForm />}
+      {Array.isArray(mainPosts) &&
+        mainPosts.map(post => <PostCard key={post.createdAt} post={post} />)}
     </div>
   );
 };
