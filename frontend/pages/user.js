@@ -33,7 +33,7 @@ const User = ({ id }) => {
             <div key="twit">
               짹짹
               <br />
-              {userInfo.Post}
+              {userInfo.Posts}
             </div>,
             <div key="twit">
               팔로잉

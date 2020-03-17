@@ -117,9 +117,16 @@ const userReducer = (state = initialState, action) => {
         ...state,
       };
     case LOAD_USER_SUCCESS:
+      if (action.me) {
+        return {
+          ...state,
+          me: action.payload,
+        };
+      }
+
       return {
         ...state,
-        me: action.payload,
+        userInfo: action.payload,
       };
     case LOAD_USER_FAILURE:
       return {

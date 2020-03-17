@@ -54,7 +54,7 @@ function signUpAPI(data) {
   return axios.post('/user/', data);
 }
 
-function logoutAPI(data) {
+function logoutAPI() {
   return axios.post(
     '/user/logout',
     {},
@@ -66,7 +66,7 @@ function logoutAPI(data) {
 
 function* logout() {
   try {
-    const result = yield call(logoutAPI);
+    yield call(logoutAPI);
     // 사가의 put은 리덕스의 dispatch 역할을 한다.
     yield put({
       type: LOG_OUT_SUCCESS,
@@ -81,22 +81,23 @@ function* logout() {
 
 function* watchLogout() {
   // takeEvery는 모두 !== takeLatest는 한 번만, 둘 다 while(true) {}임
-  yield takeLatest(LOG_OUT_REQUEST, login);
+  yield takeLatest(LOG_OUT_REQUEST, logout);
 }
 
-function loadUserAPI() {
-  return axios.get('/user/', {
+function loadUserAPI(userId) {
+  return axios.get(userId ? `/user/${userId}` : '/user/', {
     withCredentials: true,
   });
 }
 
-function* loadUser() {
+function* loadUser(action) {
   try {
-    const result = yield call(loadUserAPI);
+    const result = yield call(loadUserAPI, action.payload);
     // 사가의 put은 리덕스의 dispatch 역할을 한다.
     yield put({
       type: LOAD_USER_SUCCESS,
       payload: result.data,
+      me: !action.payload,
     });
   } catch (error) {
     console.error(error);
